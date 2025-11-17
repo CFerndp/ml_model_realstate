@@ -1,0 +1,1 @@
+python app/train_model.py
