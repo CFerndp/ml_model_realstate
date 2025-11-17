@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Demo precios de vivienda</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <!-- Chart.js para la visualización -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Predicción de precios de vivienda</h1>
+      <p>
+        Este demo utiliza el dataset California Housing. Introduce las
+        características de un distrito y el modelo estimará la mediana del
+        precio de la vivienda.
+      </p>
+
+      <!-- Sección 1: Predicción puntual -->
+      <form id="housing-form">
+        <h2>Predicción puntual</h2>
+
+        <div class="field">
+          <label for="med_inc">
+            Ingresos medios (en decenas de miles de $)
+          </label>
+          <input
+            type="number"
+            step="0.1"
+            id="med_inc"
+            name="med_inc"
+            value="4.0"
+          />
+          <small>Ejemplo: 4.0 ≈ 40.000 $</small>
+        </div>
+
+        <div class="field">
+          <label for="house_age">Edad media de las casas</label>
+          <input
+            type="number"
+            step="0.1"
+            id="house_age"
+            name="house_age"
+            value="20"
+          />
+        </div>
+
+        <div class="field">
+          <label for="ave_rooms">Habitaciones medias por vivienda</label>
+          <input
+            type="number"
+            step="0.1"
+            id="ave_rooms"
+            name="ave_rooms"
+            value="5.0"
+          />
+        </div>
+
+        <div class="field">
+          <label for="ave_bedrooms">Dormitorios medios por vivienda</label>
+          <input
+            type="number"
+            step="0.1"
+            id="ave_bedrooms"
+            name="ave_bedrooms"
+            value="1.0"
+          />
+        </div>
+
+        <div class="field">
+          <label for="population">Población del distrito</label>
+          <input
+            type="number"
+            step="1"
+            id="population"
+            name="population"
+            value="1000"
+          />
+        </div>
+
+        <div class="field">
+          <label for="ave_occup">Ocupantes medios por vivienda</label>
+          <input
+            type="number"
+            step="0.1"
+            id="ave_occup"
+            name="ave_occup"
+            value="3.0"
+          />
+        </div>
+
+        <div class="field">
+          <label for="latitude">Latitud</label>
+          <input
+            type="number"
+            step="0.01"
+            id="latitude"
+            name="latitude"
+            value="34.0"
+          />
+        </div>
+
+        <div class="field">
+          <label for="longitude">Longitud</label>
+          <input
+            type="number"
+            step="0.01"
+            id="longitude"
+            name="longitude"
+            value="-118.0"
+          />
+        </div>
+
+        <button type="submit">Predecir precio</button>
+
+        <div id="result" class="result hidden">
+          <h3>Resultado</h3>
+          <p id="predicted-price"></p>
+          <p class="note">
+            (La cifra corresponde a la <strong>mediana del valor de la
+            vivienda</strong> en el distrito, según el modelo entrenado.)
+          </p>
+        </div>
+      </form>
+
+      <div id="error" class="error hidden"></div>
+
+      <hr />
+
+      <!-- Sección 2: Visualización de curva de precios -->
+      <section class="viz-section">
+        <h2>Visualizar cómo cambia el precio</h2>
+        <p>
+          Selecciona un parámetro y un rango de valores. El modelo calculará
+          la evolución del precio manteniendo el resto de variables con los
+          valores indicados arriba.
+        </p>
+
+        <div class="field">
+          <label for="feature_name">Parámetro a variar</label>
+          <select id="feature_name" name="feature_name">
+            <option value="med_inc">Ingresos medios (med_inc)</option>
+            <option value="house_age">Edad media de las casas (house_age)</option>
+            <option value="ave_rooms">Habitaciones medias (ave_rooms)</option>
+            <option value="ave_bedrooms">Dormitorios medios (ave_bedrooms)</option>
+            <option value="population">Población (population)</option>
+            <option value="ave_occup">Ocupantes medios (ave_occup)</option>
+            <option value="latitude">Latitud (latitude)</option>
+            <option value="longitude">Longitud (longitude)</option>
+          </select>
+        </div>
+
+        <div class="field-inline">
+          <div class="field">
+            <label for="min_value">Valor mínimo</label>
+            <input
+              type="number"
+              step="0.1"
+              id="min_value"
+              value="1.0"
+            />
+          </div>
+
+          <div class="field">
+            <label for="max_value">Valor máximo</label>
+            <input
+              type="number"
+              step="0.1"
+              id="max_value"
+              value="10.0"
+            />
+          </div>
+
+          <div class="field">
+            <label for="num_points">Nº de puntos</label>
+            <input
+              type="number"
+              id="num_points"
+              value="20"
+              min="2"
+              max="200"
+            />
+          </div>
+        </div>
+
+        <button type="button" id="btn-curve">
+          Generar visualización
+        </button>
+
+        <div class="chart-container">
+          <canvas id="priceChart"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
